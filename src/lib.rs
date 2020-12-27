@@ -1,5 +1,6 @@
 //! `roux` provides data-structures and functions
 //! to implement Cellular Automata.
+#![no_std]
 
 /// The state of a cell.
 #[derive(Debug, PartialEq)]
@@ -34,7 +35,7 @@ mod tests {
     #[test]
     // check default values
     fn cell_new() {
-        let c = Cell::new();
+        let mut c = Cell::new();
         assert_eq!(c.state, CellState::Dead);
         assert_eq!(c.horizontal_position, 0);
         assert_eq!(c.vertical_position, 0);
