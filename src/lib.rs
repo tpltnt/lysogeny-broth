@@ -28,6 +28,9 @@ impl Cell {
     }
 }
 
+/// A structure to encode a grid with cells.
+struct Grid {}
+
 #[cfg(test)]
 mod tests {
     use super::*;
