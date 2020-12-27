@@ -15,6 +15,8 @@ struct Cell {
     state: CellState,
     horizontal_position: usize,
     vertical_position: usize,
+    prev: *mut Cell,
+    next: *mut Cell,
 }
 
 impl Cell {
@@ -24,6 +26,8 @@ impl Cell {
             state: CellState::Dead,
             horizontal_position: 0,
             vertical_position: 0,
+            prev: core::ptr::null_mut(),
+            next: core::ptr::null_mut(),
         }
     }
 }
