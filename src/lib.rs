@@ -11,7 +11,7 @@ enum CellState {
 
 /// A cell on a grid.
 /// Cell positions start at top left corner.
-struct Cell {
+pub struct Cell {
     state: CellState,
     horizontal_position: u8, // for more adjust data types
     vertical_position: u8,   // -> see also: Grid
@@ -33,7 +33,7 @@ impl Cell {
 }
 
 /// A structure to encode a grid with cells.
-struct Grid {
+pub struct Grid {
     // size allows for 256x256 cells -> enough for embedded
     // -> for more adjust the data types
     horizontal_size: u8,
