@@ -57,6 +57,7 @@ impl Grid {
     /// in mind and can be adjusted appropriately.
     pub fn new(h_size: u8, v_size: u8) -> Grid {
         let mut lastcell: *mut Cell = core::ptr::null_mut();
+        let mut watchdog: usize = 0;
 
         // create/allocate all cells as linked list
         // (in reverse order)
@@ -80,6 +81,10 @@ impl Grid {
                 (*(*lastcell).prev).next = lastcell; // the previous cell has the current cell as next one
                 lastcell = (*lastcell).prev; // go back one cell & repeat
             }
+            if watchdog > (h_size * v_size) as usize {
+                panic!("endless loop")
+            }
+            watchdog += 1;
         }
 
         // lastcell now points to first element in list
