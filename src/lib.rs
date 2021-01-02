@@ -1,6 +1,11 @@
 //! `roux` provides data-structures and functions
 //! to implement Cellular Automata.
 //#![no_std]
+use buddy_alloc::{BuddyAllocParam, FastAllocParam, NonThreadsafeAlloc};
+
+const FAST_HEAP_SIZE: usize = 32; // 32B
+const HEAP_SIZE: usize = 10 * 1024; // 10KB
+const LEAF_SIZE: usize = 16;
 
 /// The state of a cell.
 #[derive(Debug, PartialEq)]
