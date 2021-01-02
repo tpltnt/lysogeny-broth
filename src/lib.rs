@@ -21,7 +21,7 @@ pub struct Grid {
     // -> for more adjust the data types
     horizontal_size: u8,
     vertical_size: u8,
-    cells: Vec<CellState>,
+    cells: Vec<Vec<CellState>>,
 }
 
 impl Grid {
@@ -39,14 +39,10 @@ impl Grid {
     /// Larger grid sizes have to keep the target usize (thus architecture)
     /// in mind and can be adjusted appropriately.
     pub fn new(h_size: u8, v_size: u8) -> Grid {
-        let mut all_cells = vec![CellState::Dead; (h_size * v_size) as usize];
-
-        // lastcell now points to first element in list
-        // -> add to grid as starting point
         Grid {
             horizontal_size: h_size,
             vertical_size: v_size,
-            cells: vec![],
+            cells: vec![vec![CellState::Dead; v_size as usize]; h_size as usize],
         }
     }
 
@@ -56,15 +52,13 @@ impl Grid {
     /// * `h`: horizontal coordinate
     /// * `v`: vertical coordinate
     pub fn get_cellstate(&self, h: u8, v: u8) -> CellState {
-        let mut watchdog: usize = 0;
-
         if h >= self.horizontal_size {
             panic!("horizontal coordinate too large")
         }
         if v >= self.vertical_size {
             panic!("vertical coordinate too large")
         }
-        return self.cells[4];
+        return self.cells[h as usize][v as usize];
     }
 }
 
@@ -80,28 +74,25 @@ mod tests {
         assert_eq!(g.vertical_size, 23);
     }
 
-    //#[test]
+    #[test]
     // check grid creation values
-    fn grid_get_cell() {
+    fn grid_get_cellstate() {
         let g = Grid::new(3, 17);
-        assert_eq!(g.horizontal_size, 3);
-        assert_eq!(g.vertical_size, 17);
-        let c = g.get_cell(1, 8);
-        assert_eq!(c.horizontal_position, 1);
-        assert_eq!(c.vertical_position, 8);
+        let c = g.get_cellstate(1, 8);
+        assert_eq!(c, CellState::Dead);
     }
 
     #[test]
     #[should_panic]
     fn grid_get_cell_v_too_large() {
         let g = Grid::new(3, 17);
-        let _c = g.get_cell(1, 17);
+        let _c = g.get_cellstate(1, 17);
     }
 
-    //#[test]
-    //#[should_panic]
+    #[test]
+    #[should_panic]
     fn grid_get_cell_h_too_large() {
         let g = Grid::new(3, 1);
-        let _c = g.get_cell(3, 0);
+        let _c = g.get_cellstate(3, 0);
     }
 }

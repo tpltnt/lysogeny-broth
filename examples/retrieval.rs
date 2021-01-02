@@ -3,5 +3,5 @@ use roux::*;
 fn main() {
     println!("basic retrieval example");
     let g = roux::Grid::new(3, 1);
-    let _c = g.get_cell(3, 0);
+    let _c = g.get_cellstate(3, 0);
 }
