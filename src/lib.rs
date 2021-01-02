@@ -76,6 +76,15 @@ impl Grid {
         return self.cells[h as usize][v as usize];
     }
 
+    /// Retrieve a cell state (for modification) using a coordinate tuple.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn get_cellstate_hv(&self, hv: (u8, u8)) -> CellState {
+        self.get_cellstate(hv.0, hv.1)
+    }
+
     /// Set a (modified) cell state.
     ///
     /// # Arguments
@@ -108,7 +117,11 @@ mod tests {
     // check grid creation values
     fn grid_get_cellstate() {
         let g = Grid::new(3, 17);
-        let c = g.get_cellstate(1, 8);
+        let mut c = g.get_cellstate(1, 8);
+        assert_eq!(c, CellState::Dead);
+
+        // test using tuple
+        c = g.get_cellstate_hv((1, 2));
         assert_eq!(c, CellState::Dead);
     }
 
