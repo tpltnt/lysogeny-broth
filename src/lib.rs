@@ -3,9 +3,24 @@
 //#![no_std]
 use buddy_alloc::{BuddyAllocParam, FastAllocParam, NonThreadsafeAlloc};
 
+// --- all things allocator --- //
 const FAST_HEAP_SIZE: usize = 32; // 32B
 const HEAP_SIZE: usize = 10 * 1024; // 10KB
-const LEAF_SIZE: usize = 16;
+                                    /*
+                                    const LEAF_SIZE: usize = 16;
+
+                                    pub static mut FAST_HEAP: [u8; FAST_HEAP_SIZE] = [0u8; FAST_HEAP_SIZE];
+                                    pub static mut HEAP: [u8; HEAP_SIZE] = [0u8; HEAP_SIZE];
+
+                                    // This allocator can't work in tests since it's non-threadsafe.
+                                    #[cfg_attr(not(test), global_allocator)]
+                                    static ALLOC: NonThreadsafeAlloc = unsafe {
+                                        let fast_param = FastAllocParam::new(FAST_HEAP.as_ptr(), FAST_HEAP_SIZE);
+                                        let buddy_param = BuddyAllocParam::new(HEAP.as_ptr(), HEAP_SIZE, LEAF_SIZE);
+                                        NonThreadsafeAlloc::new(fast_param, buddy_param)
+                                    };
+                                    // --- global allocator done --- //
+                                    */
 
 /// The state of a cell.
 #[derive(Copy, Clone, Debug, PartialEq)]
