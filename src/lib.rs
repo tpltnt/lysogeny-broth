@@ -79,8 +79,7 @@ impl Grid {
     /// Retrieve a cell state (for modification) using a coordinate tuple.
     ///
     /// # Arguments
-    /// * `h`: horizontal coordinate
-    /// * `v`: vertical coordinate
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
     pub fn get_cellstate_hv(&self, hv: (u8, u8)) -> CellState {
         self.get_cellstate(hv.0, hv.1)
     }
@@ -98,6 +97,14 @@ impl Grid {
             panic!("vertical coordinate too large")
         }
         self.cells[h as usize][v as usize] = state;
+    }
+
+    /// Set a (modified) cell state using a coordination tuple.
+    ///
+    /// # Arguments
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
+    pub fn set_cellstate_hv(&mut self, hv: (u8, u8), state: CellState) {
+        self.set_cellstate(hv.0, hv.1, state)
     }
 }
 
@@ -144,7 +151,12 @@ mod tests {
     fn grid_set_cellstate() {
         let mut g = Grid::new(3, 17);
         g.set_cellstate(1, 8, CellState::Alive);
-        let c = g.get_cellstate(1, 8);
+        let mut c = g.get_cellstate(1, 8);
+        assert_eq!(c, CellState::Alive);
+
+        // use tuple
+        g.set_cellstate_hv((2, 5), CellState::Alive);
+        g.get_cellstate(2, 5);
         assert_eq!(c, CellState::Alive);
     }
 
