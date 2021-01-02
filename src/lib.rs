@@ -151,7 +151,7 @@ mod tests {
     fn grid_set_cellstate() {
         let mut g = Grid::new(3, 17);
         g.set_cellstate(1, 8, CellState::Alive);
-        let mut c = g.get_cellstate(1, 8);
+        let c = g.get_cellstate(1, 8);
         assert_eq!(c, CellState::Alive);
 
         // use tuple
