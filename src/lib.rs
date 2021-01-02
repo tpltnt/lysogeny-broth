@@ -75,6 +75,21 @@ impl Grid {
         }
         return self.cells[h as usize][v as usize];
     }
+
+    /// Set a (modified) cell state.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn set_cellstate(&mut self, h: u8, v: u8, state: CellState) {
+        if h >= self.horizontal_size {
+            panic!("horizontal coordinate too large")
+        }
+        if v >= self.vertical_size {
+            panic!("vertical coordinate too large")
+        }
+        self.cells[h as usize][v as usize] = state;
+    }
 }
 
 #[cfg(test)]
@@ -109,5 +124,28 @@ mod tests {
     fn grid_get_cell_h_too_large() {
         let g = Grid::new(3, 1);
         let _c = g.get_cellstate(3, 0);
+    }
+
+    #[test]
+    // check grid creation values
+    fn grid_set_cellstate() {
+        let mut g = Grid::new(3, 17);
+        g.set_cellstate(1, 8, CellState::Alive);
+        let c = g.get_cellstate(1, 8);
+        assert_eq!(c, CellState::Alive);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_set_cell_v_too_large() {
+        let mut g = Grid::new(3, 17);
+        g.set_cellstate(1, 17, CellState::Alive);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_set_cell_h_too_large() {
+        let mut g = Grid::new(3, 1);
+        g.set_cellstate(3, 0, CellState::Alive);
     }
 }
