@@ -106,6 +106,34 @@ impl Grid {
     pub fn set_cellstate_hv(&mut self, hv: (u8, u8), state: CellState) {
         self.set_cellstate(hv.0, hv.1, state)
     }
+
+    /// Get coordinates of "northern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn get_north_coordinate(&self, h: u8, v: u8) -> (u8, u8) {
+        if h >= self.horizontal_size {
+            panic!("horizontal coordinate too large")
+        }
+        if v >= self.vertical_size {
+            panic!("vertical coordinate too large")
+        }
+        if v == 0 {
+            return (h, self.vertical_size - 1);
+        }
+        (h, v - 1)
+    }
+
+    /// Get coordinates of "northern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
+    pub fn get_north_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
+        self.get_north_coordinate(hv.0, hv.1)
+    }
 }
 
 #[cfg(test)]
@@ -172,5 +200,31 @@ mod tests {
     fn grid_set_cell_h_too_large() {
         let mut g = Grid::new(3, 1);
         g.set_cellstate(3, 0, CellState::Alive);
+    }
+
+    #[test]
+    fn grid_get_north_coordinate() {
+        let mut g = Grid::new(3, 4);
+        let mut result = g.get_north_coordinate(1, 2);
+        assert_eq!(result.0, 1);
+        assert_eq!(result.1, 1);
+
+        result = g.get_north_coordinate(2, 0);
+        assert_eq!(result.0, 2);
+        assert_eq!(result.1, 3);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_north_coordinate_v_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_north_coordinate(0, 4);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_north_coordinate_h_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_north_coordinate(1, 2);
     }
 }
