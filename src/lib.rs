@@ -2,6 +2,7 @@
 //! to implement Cellular Automata.
 //#![no_std]
 use buddy_alloc::{BuddyAllocParam, FastAllocParam, NonThreadsafeAlloc};
+use std::alloc::handle_alloc_error;
 
 // --- all things allocator --- //
 const FAST_HEAP_SIZE: usize = 32; // 32B
@@ -54,6 +55,12 @@ impl Grid {
     /// Larger grid sizes have to keep the target usize (thus architecture)
     /// in mind and can be adjusted appropriately.
     pub fn new(h_size: u8, v_size: u8) -> Grid {
+        if h_size == 0 {
+            panic!("horizontal coordinate too small")
+        }
+        if v_size == 0 {
+            panic!("vertical coordinate too small")
+        }
         Grid {
             horizontal_size: h_size,
             vertical_size: v_size,
@@ -306,6 +313,13 @@ mod tests {
         let g = Grid::new(5, 23);
         assert_eq!(g.horizontal_size, 5);
         assert_eq!(g.vertical_size, 23);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_new_too_small() {
+        let _ = Grid::new(0, 1);
+        let _ = Grid::new(1, 0);
     }
 
     #[test]
