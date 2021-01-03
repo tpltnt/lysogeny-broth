@@ -1,5 +1,7 @@
 //! `roux` provides data-structures and functions
 //! to implement Cellular Automata.
+//! The grid is of toroidal shape, i.e. the coordinate
+//! values/neighbours wrap around.
 //#![no_std]
 use buddy_alloc::{BuddyAllocParam, FastAllocParam, NonThreadsafeAlloc};
 use std::alloc::handle_alloc_error;
