@@ -134,6 +134,166 @@ impl Grid {
     pub fn get_north_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
         self.get_north_coordinate(hv.0, hv.1)
     }
+
+    /// Get coordinates of "eastern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn get_east_coordinate(&self, h: u8, v: u8) -> (u8, u8) {
+        if h >= self.horizontal_size {
+            panic!("horizontal coordinate too large")
+        }
+        if v >= self.vertical_size {
+            panic!("vertical coordinate too large")
+        }
+        if h == self.horizontal_size - 1 {
+            return (0, v);
+        }
+        (h + 1, v)
+    }
+
+    /// Get coordinates of "eastern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
+    pub fn get_east_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
+        self.get_east_coordinate(hv.0, hv.1)
+    }
+
+    /// Get coordinates of "southern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn get_south_coordinate(&self, h: u8, v: u8) -> (u8, u8) {
+        if h >= self.horizontal_size {
+            panic!("horizontal coordinate too large")
+        }
+        if v >= self.vertical_size {
+            panic!("vertical coordinate too large")
+        }
+        if v == self.vertical_size - 1 {
+            return (h, 0);
+        }
+        (h, v + 1)
+    }
+
+    /// Get coordinates of "eastern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
+    pub fn get_south_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
+        self.get_south_coordinate(hv.0, hv.1)
+    }
+
+    /// Get coordinates of "western" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn get_west_coordinate(&self, h: u8, v: u8) -> (u8, u8) {
+        if h >= self.horizontal_size {
+            panic!("horizontal coordinate too large")
+        }
+        if v >= self.vertical_size {
+            panic!("vertical coordinate too large")
+        }
+        if h == 0 {
+            return (self.horizontal_size - 1, v);
+        }
+        (h - 1, v)
+    }
+
+    /// Get coordinates of "western" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
+    pub fn get_west_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
+        self.get_west_coordinate(hv.0, hv.1)
+    }
+
+    /// Get coordinates of "north eastern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn get_northeast_coordinate(&self, h: u8, v: u8) -> (u8, u8) {
+        self.get_north_coordinate_hv(self.get_east_coordinate(h, v))
+    }
+
+    /// Get coordinates of "north eastern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
+    pub fn get_northeast_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
+        self.get_north_coordinate_hv(self.get_east_coordinate(hv.0, hv.1))
+    }
+
+    /// Get coordinates of "south eastern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn get_southeast_coordinate(&self, h: u8, v: u8) -> (u8, u8) {
+        self.get_south_coordinate_hv(self.get_east_coordinate(h, v))
+    }
+
+    /// Get coordinates of "south eastern" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
+    pub fn get_southeast_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
+        self.get_south_coordinate_hv(self.get_east_coordinate(hv.0, hv.1))
+    }
+
+    /// Get coordinates of "south western" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn get_southwest_coordinate(&self, h: u8, v: u8) -> (u8, u8) {
+        self.get_south_coordinate_hv(self.get_west_coordinate(h, v))
+    }
+
+    /// Get coordinates of "south western" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
+    pub fn get_southwest_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
+        self.get_south_coordinate_hv(self.get_west_coordinate(hv.0, hv.1))
+    }
+
+    /// Get coordinates of "north western" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `h`: horizontal coordinate
+    /// * `v`: vertical coordinate
+    pub fn get_northwest_coordinate(&self, h: u8, v: u8) -> (u8, u8) {
+        self.get_north_coordinate_hv(self.get_west_coordinate(h, v))
+    }
+
+    /// Get coordinates of "north western" cell relative
+    /// to the given grid coordinates.
+    ///
+    /// # Arguments
+    /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
+    pub fn get_northwest_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
+        self.get_north_coordinate_hv(self.get_west_coordinate(hv.0, hv.1))
+    }
 }
 
 #[cfg(test)]
@@ -226,5 +386,161 @@ mod tests {
     fn grid_get_north_coordinate_h_too_large() {
         let mut g = Grid::new(1, 4);
         let _ = g.get_north_coordinate(1, 2);
+    }
+
+    #[test]
+    fn grid_get_south_coordinate() {
+        let mut g = Grid::new(3, 4);
+        let mut result = g.get_south_coordinate(1, 2);
+        assert_eq!(result.0, 1);
+        assert_eq!(result.1, 3);
+
+        result = g.get_south_coordinate(2, 0);
+        assert_eq!(result.0, 2);
+        assert_eq!(result.1, 1);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_south_coordinate_v_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_south_coordinate(0, 4);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_south_coordinate_h_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_south_coordinate(1, 2);
+    }
+
+    #[test]
+    fn grid_get_west_coordinate() {
+        let mut g = Grid::new(3, 4);
+        let mut result = g.get_west_coordinate(1, 2);
+        assert_eq!(result.0, 0);
+        assert_eq!(result.1, 2);
+
+        result = g.get_west_coordinate(0, 2);
+        assert_eq!(result.0, 2);
+        assert_eq!(result.1, 2);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_west_coordinate_v_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_west_coordinate(0, 4);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_west_coordinate_h_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_west_coordinate(1, 2);
+    }
+
+    #[test]
+    fn grid_get_northeast_coordinate() {
+        let mut g = Grid::new(3, 4);
+        let mut result = g.get_northeast_coordinate(1, 2);
+        assert_eq!(result.0, 2);
+        assert_eq!(result.1, 1);
+
+        result = g.get_northeast_coordinate(2, 0);
+        assert_eq!(result.0, 0);
+        assert_eq!(result.1, 3);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_northeast_coordinate_v_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_northeast_coordinate(0, 4);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_northeast_coordinate_h_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_northeast_coordinate(1, 2);
+    }
+
+    #[test]
+    fn grid_get_southeast_coordinate() {
+        let mut g = Grid::new(3, 4);
+        let mut result = g.get_southeast_coordinate(1, 2);
+        assert_eq!(result.0, 2);
+        assert_eq!(result.1, 3);
+
+        result = g.get_southeast_coordinate(2, 0);
+        assert_eq!(result.0, 0);
+        assert_eq!(result.1, 1);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_southeast_coordinate_v_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_southeast_coordinate(0, 4);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_southeast_coordinate_h_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_southeast_coordinate(1, 2);
+    }
+
+    #[test]
+    fn grid_get_southwest_coordinate() {
+        let mut g = Grid::new(3, 4);
+        let mut result = g.get_southwest_coordinate(1, 2);
+        assert_eq!(result.0, 0);
+        assert_eq!(result.1, 3);
+
+        result = g.get_southwest_coordinate(0, 0);
+        assert_eq!(result.0, 2);
+        assert_eq!(result.1, 1);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_southwest_coordinate_v_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_southwest_coordinate(0, 4);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_southwest_coordinate_h_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_southwest_coordinate(1, 2);
+    }
+
+    #[test]
+    fn grid_get_northwest_coordinate() {
+        let mut g = Grid::new(3, 4);
+        let mut result = g.get_northwest_coordinate(1, 2);
+        assert_eq!(result.0, 0);
+        assert_eq!(result.1, 1);
+
+        result = g.get_northwest_coordinate(0, 0);
+        assert_eq!(result.0, 2);
+        assert_eq!(result.1, 3);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_northwest_coordinate_v_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_northwest_coordinate(0, 4);
+    }
+
+    #[test]
+    #[should_panic]
+    fn grid_get_northwest_coordinate_h_too_large() {
+        let mut g = Grid::new(1, 4);
+        let _ = g.get_northwest_coordinate(1, 2);
     }
 }
