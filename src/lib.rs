@@ -305,6 +305,14 @@ impl Grid {
     }
 }
 
+/// A universe contains
+struct Universe {
+    iteration: usize,                   // counter for current iteration
+    grid: Grid,                         // current grid state
+    shadow: Grid,                       // temporary grid to calculate new state
+    automaton: fn(u8, u8) -> CellState, // transformation function / automaton
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
