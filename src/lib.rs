@@ -388,7 +388,7 @@ mod tests {
 
     #[test]
     fn grid_get_north_coordinate() {
-        let mut g = Grid::new(3, 4);
+        let g = Grid::new(3, 4);
         let mut result = g.get_north_coordinate(1, 2);
         assert_eq!(result.0, 1);
         assert_eq!(result.1, 1);
@@ -401,20 +401,20 @@ mod tests {
     #[test]
     #[should_panic]
     fn grid_get_north_coordinate_v_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_north_coordinate(0, 4);
     }
 
     #[test]
     #[should_panic]
     fn grid_get_north_coordinate_h_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_north_coordinate(1, 2);
     }
 
     #[test]
     fn grid_get_south_coordinate() {
-        let mut g = Grid::new(3, 4);
+        let g = Grid::new(3, 4);
         let mut result = g.get_south_coordinate(1, 2);
         assert_eq!(result.0, 1);
         assert_eq!(result.1, 3);
@@ -427,20 +427,20 @@ mod tests {
     #[test]
     #[should_panic]
     fn grid_get_south_coordinate_v_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_south_coordinate(0, 4);
     }
 
     #[test]
     #[should_panic]
     fn grid_get_south_coordinate_h_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_south_coordinate(1, 2);
     }
 
     #[test]
     fn grid_get_west_coordinate() {
-        let mut g = Grid::new(3, 4);
+        let g = Grid::new(3, 4);
         let mut result = g.get_west_coordinate(1, 2);
         assert_eq!(result.0, 0);
         assert_eq!(result.1, 2);
@@ -453,20 +453,20 @@ mod tests {
     #[test]
     #[should_panic]
     fn grid_get_west_coordinate_v_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_west_coordinate(0, 4);
     }
 
     #[test]
     #[should_panic]
     fn grid_get_west_coordinate_h_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_west_coordinate(1, 2);
     }
 
     #[test]
     fn grid_get_northeast_coordinate() {
-        let mut g = Grid::new(3, 4);
+        let g = Grid::new(3, 4);
         let mut result = g.get_northeast_coordinate(1, 2);
         assert_eq!(result.0, 2);
         assert_eq!(result.1, 1);
@@ -479,20 +479,20 @@ mod tests {
     #[test]
     #[should_panic]
     fn grid_get_northeast_coordinate_v_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_northeast_coordinate(0, 4);
     }
 
     #[test]
     #[should_panic]
     fn grid_get_northeast_coordinate_h_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_northeast_coordinate(1, 2);
     }
 
     #[test]
     fn grid_get_southeast_coordinate() {
-        let mut g = Grid::new(3, 4);
+        let g = Grid::new(3, 4);
         let mut result = g.get_southeast_coordinate(1, 2);
         assert_eq!(result.0, 2);
         assert_eq!(result.1, 3);
@@ -505,20 +505,20 @@ mod tests {
     #[test]
     #[should_panic]
     fn grid_get_southeast_coordinate_v_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_southeast_coordinate(0, 4);
     }
 
     #[test]
     #[should_panic]
     fn grid_get_southeast_coordinate_h_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_southeast_coordinate(1, 2);
     }
 
     #[test]
     fn grid_get_southwest_coordinate() {
-        let mut g = Grid::new(3, 4);
+        let g = Grid::new(3, 4);
         let mut result = g.get_southwest_coordinate(1, 2);
         assert_eq!(result.0, 0);
         assert_eq!(result.1, 3);
@@ -531,20 +531,20 @@ mod tests {
     #[test]
     #[should_panic]
     fn grid_get_southwest_coordinate_v_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_southwest_coordinate(0, 4);
     }
 
     #[test]
     #[should_panic]
     fn grid_get_southwest_coordinate_h_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_southwest_coordinate(1, 2);
     }
 
     #[test]
     fn grid_get_northwest_coordinate() {
-        let mut g = Grid::new(3, 4);
+        let g = Grid::new(3, 4);
         let mut result = g.get_northwest_coordinate(1, 2);
         assert_eq!(result.0, 0);
         assert_eq!(result.1, 1);
@@ -557,14 +557,14 @@ mod tests {
     #[test]
     #[should_panic]
     fn grid_get_northwest_coordinate_v_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_northwest_coordinate(0, 4);
     }
 
     #[test]
     #[should_panic]
     fn grid_get_northwest_coordinate_h_too_large() {
-        let mut g = Grid::new(1, 4);
+        let g = Grid::new(1, 4);
         let _ = g.get_northwest_coordinate(1, 2);
     }
 }
