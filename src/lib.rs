@@ -307,7 +307,6 @@ impl Grid {
 /// Celluluar Automata to do their thing.
 #[derive(Copy, Clone)]
 pub struct Universe {
-    iteration: usize,                          // counter for current iteration
     grid: Grid,                                // current grid state
     shadow: Grid,                              // temporary grid to calculate new state
     automaton: fn(u8, u8, &Grid) -> CellState, // transformation function / automaton
@@ -322,7 +321,6 @@ impl Universe {
     /// * `rules`: a function mapping a coordinate (and thus the state of a cell) on a grid to a new state
     pub fn new(h_size: u8, v_size: u8, rules: fn(u8, u8, &Grid) -> CellState) -> Universe {
         Universe {
-            iteration: 0,
             grid: Grid::new(h_size, v_size),
             shadow: Grid::new(h_size, v_size),
             automaton: rules,
@@ -340,7 +338,6 @@ impl Universe {
         }
         // copy the new state
         self.grid = self.shadow;
-        self.iteration += 1; // add one to iteration counter
     }
 }
 
@@ -612,6 +609,5 @@ mod tests {
                 assert_eq!(cs, CellState::Dead)
             }
         }
-        assert_eq!(u.iteration, 1);
     }
 }
