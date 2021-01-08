@@ -11,6 +11,10 @@ const VERTICAL_MAX: usize = u8::MAX as usize;
 const HORIZONTAL_MAX: usize = u8::MAX as usize;
 
 /// The state of a cell.
+///
+/// # Remarks
+/// A cell has no concept of its neighbours. Everything
+/// in terms of space is handled by the Grid.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum CellState {
     Dead,
@@ -19,6 +23,7 @@ pub enum CellState {
 
 /// A structure to encode a grid with cells.
 /// Cell positions start at top left corner.
+/// The grid handles everything in terms of space.
 pub struct Grid {
     // size allows for 256x256 cells -> enough for embedded
     // -> for more adjust the data types
@@ -297,12 +302,30 @@ impl Grid {
     }
 }
 
-/// A universe contains
-struct Universe {
-    iteration: usize,                   // counter for current iteration
-    grid: Grid,                         // current grid state
-    shadow: Grid,                       // temporary grid to calculate new state
-    automaton: fn(u8, u8) -> CellState, // transformation function / automaton
+/// A universe contains everything you need to enable
+/// Celluluar Automata to do their thing.
+pub struct Universe {
+    iteration: usize,                          // counter for current iteration
+    grid: Grid,                                // current grid state
+    shadow: Grid,                              // temporary grid to calculate new state
+    automaton: fn(u8, u8, &Grid) -> CellState, // transformation function / automaton
+}
+
+impl Universe {
+    /// Create a new universe with only dead cells.
+    ///
+    /// # Arguments
+    /// * `h_size`: horizontal dimension/size as number of cells
+    /// * `v_size`: vertical dimension/size as number of cells
+    /// * `rules`: a function mapping a coordinate (and thus the state of a cell) on a grid to a new state
+    pub fn new(h_size: u8, v_size: u8, rules: fn(u8, u8, &Grid) -> CellState) -> Universe {
+        Universe {
+            iteration: 0,
+            grid: Grid::new(h_size, v_size),
+            shadow: Grid::new(h_size, v_size),
+            automaton: rules,
+        }
+    }
 }
 
 #[cfg(test)]
