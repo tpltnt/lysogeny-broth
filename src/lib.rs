@@ -1,29 +1,14 @@
 //! `roux` provides data-structures and functions
 //! to implement Cellular Automata.
 //! The grid is of toroidal shape, i.e. the coordinate
-//! values/neighbours wrap around.
-//#![no_std]
-use buddy_alloc::{BuddyAllocParam, FastAllocParam, NonThreadsafeAlloc};
-use std::alloc::handle_alloc_error;
+//! values/neighbours wrap around. It also uses a statically
+//! allocated grid to sidestep the need for dynamic memory
+//! management.
+#![no_std]
 
-// --- all things allocator --- //
-const FAST_HEAP_SIZE: usize = 32; // 32B
-const HEAP_SIZE: usize = 10 * 1024; // 10KB
-                                    /*
-                                    const LEAF_SIZE: usize = 16;
-
-                                    pub static mut FAST_HEAP: [u8; FAST_HEAP_SIZE] = [0u8; FAST_HEAP_SIZE];
-                                    pub static mut HEAP: [u8; HEAP_SIZE] = [0u8; HEAP_SIZE];
-
-                                    // This allocator can't work in tests since it's non-threadsafe.
-                                    #[cfg_attr(not(test), global_allocator)]
-                                    static ALLOC: NonThreadsafeAlloc = unsafe {
-                                        let fast_param = FastAllocParam::new(FAST_HEAP.as_ptr(), FAST_HEAP_SIZE);
-                                        let buddy_param = BuddyAllocParam::new(HEAP.as_ptr(), HEAP_SIZE, LEAF_SIZE);
-                                        NonThreadsafeAlloc::new(fast_param, buddy_param)
-                                    };
-                                    // --- global allocator done --- //
-                                    */
+// tweak here for grid size / memory usage
+const VERTICAL_MAX: usize = u8::MAX as usize;
+const HORIZONTAL_MAX: usize = u8::MAX as usize;
 
 /// The state of a cell.
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -39,7 +24,7 @@ pub struct Grid {
     // -> for more adjust the data types
     horizontal_size: u8,
     vertical_size: u8,
-    cells: Vec<Vec<CellState>>,
+    cells: [[CellState; HORIZONTAL_MAX]; VERTICAL_MAX],
 }
 
 impl Grid {
@@ -63,10 +48,17 @@ impl Grid {
         if v_size == 0 {
             panic!("vertical coordinate too small")
         }
+        if h_size as usize > HORIZONTAL_MAX {
+            panic!("horizontal coordinate too large")
+        }
+        if v_size as usize > VERTICAL_MAX {
+            panic!("vertical coordinate too large")
+        }
+
         Grid {
             horizontal_size: h_size,
             vertical_size: v_size,
-            cells: vec![vec![CellState::Dead; v_size as usize]; h_size as usize],
+            cells: [[CellState::Dead; HORIZONTAL_MAX]; VERTICAL_MAX],
         }
     }
 
