@@ -307,7 +307,7 @@ impl Grid {
 /// Celluluar Automata to do their thing.
 #[derive(Copy, Clone)]
 pub struct Universe {
-    grid: Grid,                                // current grid state
+    pub grid: Grid,                            // current grid state
     shadow: Grid,                              // temporary grid to calculate new state
     automaton: fn(u8, u8, &Grid) -> CellState, // transformation function / automaton
 }
@@ -336,7 +336,7 @@ impl Universe {
                 self.shadow.set_cellstate(h, v, state);
             }
         }
-        // copy the new state
+        // copy over new state to public grid
         self.grid = self.shadow;
     }
 }
@@ -609,5 +609,79 @@ mod tests {
                 assert_eq!(cs, CellState::Dead)
             }
         }
+    }
+
+    // test based on Wolfram rule 30
+    // https://mathworld.wolfram.com/Rule30.html
+    // https://en.wikipedia.org/wiki/Rule_30
+    #[test]
+    fn universe_update_rule30() {
+        fn rule30(h: u8, v: u8, g: &Grid) -> CellState {
+            let left = g.get_west_coordinate(h, v);
+            let right = g.get_east_coordinate(h, v);
+            let state = (
+                g.get_cellstate_hv(left),
+                g.get_cellstate(h, v),
+                g.get_cellstate_hv(right),
+            );
+            return match state {
+                (CellState::Alive, CellState::Alive, CellState::Alive) => CellState::Dead,
+                (CellState::Alive, CellState::Alive, CellState::Dead) => CellState::Dead,
+                (CellState::Alive, CellState::Dead, CellState::Alive) => CellState::Dead,
+                (CellState::Alive, CellState::Dead, CellState::Dead) => CellState::Alive,
+                (CellState::Dead, CellState::Alive, CellState::Alive) => CellState::Alive,
+                (CellState::Dead, CellState::Alive, CellState::Dead) => CellState::Alive,
+                (CellState::Dead, CellState::Dead, CellState::Alive) => CellState::Alive,
+                (CellState::Dead, CellState::Dead, CellState::Dead) => CellState::Dead,
+            };
+        }
+
+        // test on dead universe -> should stay dead
+        let u1 = Universe::new(3, 1, rule30);
+        u1.update();
+        for h in 0..2u8 {
+            let cs = u1.grid.get_cellstate(h, 0);
+            assert_eq!(cs, CellState::Dead)
+        }
+
+        // test with center cell alive
+        let mut u2 = Universe::new(3, 1, rule30);
+        u2.grid.set_cellstate(1, 0, CellState::Alive);
+        // check for correct initial state
+        assert_eq!(u2.grid.get_cellstate(0, 0), CellState::Dead);
+        assert_eq!(u2.grid.get_cellstate(1, 0), CellState::Alive);
+        assert_eq!(u2.grid.get_cellstate(2, 0), CellState::Dead);
+
+        // more in depth sanity checks
+        assert_eq!((1, 0), u2.grid.get_east_coordinate(0, 0));
+        assert_eq!((2, 0), u2.grid.get_east_coordinate(1, 0));
+        assert_eq!((0, 0), u2.grid.get_east_coordinate(2, 0));
+        assert_eq!((2, 0), u2.grid.get_west_coordinate(0, 0));
+        assert_eq!((0, 0), u2.grid.get_west_coordinate(1, 0));
+        assert_eq!((1, 0), u2.grid.get_west_coordinate(2, 0));
+
+        // test the rule
+        assert_eq!(CellState::Alive, rule30(0, 0, &u2.grid));
+        assert_eq!(CellState::Alive, rule30(1, 0, &u2.grid));
+        assert_eq!(CellState::Alive, rule30(2, 0, &u2.grid));
+
+        // all cells become alive in first iteration (apply the rule)
+        u2.update();
+
+        // test shadow state
+        assert_eq!(u2.shadow.get_cellstate(0, 0), CellState::Alive);
+        assert_eq!(u2.shadow.get_cellstate(1, 0), CellState::Alive);
+        assert_eq!(u2.shadow.get_cellstate(2, 0), CellState::Alive);
+
+        // test public start
+        assert_eq!(u2.grid.get_cellstate(0, 0), CellState::Alive);
+        assert_eq!(u2.grid.get_cellstate(1, 0), CellState::Alive);
+        assert_eq!(u2.grid.get_cellstate(2, 0), CellState::Alive);
+
+        // this universe should die on second iteration
+        u2.update();
+        assert_eq!(u2.grid.get_cellstate(0, 0), CellState::Dead);
+        assert_eq!(u2.grid.get_cellstate(1, 0), CellState::Dead);
+        assert_eq!(u2.grid.get_cellstate(2, 0), CellState::Dead);
     }
 }
