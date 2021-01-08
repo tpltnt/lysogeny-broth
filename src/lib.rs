@@ -24,6 +24,7 @@ pub enum CellState {
 /// A structure to encode a grid with cells.
 /// Cell positions start at top left corner.
 /// The grid handles everything in terms of space.
+#[derive(Copy, Clone, Debug)]
 pub struct Grid {
     // size allows for 256x256 cells -> enough for embedded
     // -> for more adjust the data types
@@ -304,6 +305,7 @@ impl Grid {
 
 /// A universe contains everything you need to enable
 /// Celluluar Automata to do their thing.
+#[derive(Copy, Clone)]
 pub struct Universe {
     iteration: usize,                          // counter for current iteration
     grid: Grid,                                // current grid state
@@ -325,6 +327,20 @@ impl Universe {
             shadow: Grid::new(h_size, v_size),
             automaton: rules,
         }
+    }
+
+    /// Update the universe according to the given state and rules
+    pub fn update(mut self) {
+        // update the shadow grid
+        for h in 0..self.grid.horizontal_size {
+            for v in 0..self.grid.vertical_size {
+                let state = (self.automaton)(h, v, &self.grid);
+                self.shadow.set_cellstate(h, v, state);
+            }
+        }
+        // copy the new state
+        self.grid = self.shadow;
+        self.iteration += 1; // add one to iteration counter
     }
 }
 
@@ -581,5 +597,21 @@ mod tests {
     fn grid_get_northwest_coordinate_h_too_large() {
         let g = Grid::new(1, 4);
         let _ = g.get_northwest_coordinate(1, 2);
+    }
+
+    #[test]
+    fn universe_update() {
+        fn identity(h: u8, v: u8, g: &Grid) -> CellState {
+            g.get_cellstate(h, v)
+        }
+        let u = Universe::new(4, 6, identity);
+        u.update();
+        for h in 0..4u8 {
+            for v in 0..6u8 {
+                let cs = u.grid.get_cellstate(h, v);
+                assert_eq!(cs, CellState::Dead)
+            }
+        }
+        assert_eq!(u.iteration, 1);
     }
 }
