@@ -611,6 +611,24 @@ mod tests {
         }
     }
 
+    #[test]
+    fn universe_update_inversion() {
+        fn inversion(h: u8, v: u8, g: &Grid) -> CellState {
+            match g.get_cellstate(h, v) {
+                &CellState::Alive => CellState::Dead,
+                &CellState::Dead => CellState::Alive,
+            }
+        }
+        let u = Universe::new(4, 6, inversion);
+        u.update();
+        for h in 0..4u8 {
+            for v in 0..6u8 {
+                let cs = u.grid.get_cellstate(h, v);
+                assert_eq!(cs, &CellState::Alive)
+            }
+        }
+    }
+
     // test based on Wolfram rule 30
     // https://mathworld.wolfram.com/Rule30.html
     // https://en.wikipedia.org/wiki/Rule_30
