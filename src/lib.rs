@@ -73,21 +73,21 @@ impl Grid {
     /// # Arguments
     /// * `h`: horizontal coordinate
     /// * `v`: vertical coordinate
-    pub fn get_cellstate(&self, h: u8, v: u8) -> CellState {
+    pub fn get_cellstate(&self, h: u8, v: u8) -> &CellState {
         if h >= self.horizontal_size {
             panic!("horizontal coordinate too large")
         }
         if v >= self.vertical_size {
             panic!("vertical coordinate too large")
         }
-        return self.cells[h as usize][v as usize];
+        return &self.cells[h as usize][v as usize];
     }
 
     /// Retrieve a cell state (for modification) using a coordinate tuple.
     ///
     /// # Arguments
     /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
-    pub fn get_cellstate_hv(&self, hv: (u8, u8)) -> CellState {
+    pub fn get_cellstate_hv(&self, hv: (u8, u8)) -> &CellState {
         self.get_cellstate(hv.0, hv.1)
     }
 
@@ -365,11 +365,11 @@ mod tests {
     fn grid_get_cellstate() {
         let g = Grid::new(3, 17);
         let mut c = g.get_cellstate(1, 8);
-        assert_eq!(c, CellState::Dead);
+        assert_eq!(c, &CellState::Dead);
 
         // test using tuple
         c = g.get_cellstate_hv((1, 2));
-        assert_eq!(c, CellState::Dead);
+        assert_eq!(c, &CellState::Dead);
     }
 
     #[test]
@@ -391,13 +391,13 @@ mod tests {
     fn grid_set_cellstate() {
         let mut g = Grid::new(3, 17);
         g.set_cellstate(1, 8, CellState::Alive);
-        let c = g.get_cellstate(1, 8);
-        assert_eq!(c, CellState::Alive);
+        let mut c = g.get_cellstate(1, 8);
+        assert_eq!(c, &CellState::Alive);
 
         // use tuple
         g.set_cellstate_hv((2, 5), CellState::Alive);
-        g.get_cellstate(2, 5);
-        assert_eq!(c, CellState::Alive);
+        c = g.get_cellstate(2, 5);
+        assert_eq!(c, &CellState::Alive);
     }
 
     #[test]
@@ -599,14 +599,14 @@ mod tests {
     #[test]
     fn universe_update() {
         fn identity(h: u8, v: u8, g: &Grid) -> CellState {
-            g.get_cellstate(h, v)
+            *g.get_cellstate(h, v)
         }
         let u = Universe::new(4, 6, identity);
         u.update();
         for h in 0..4u8 {
             for v in 0..6u8 {
                 let cs = u.grid.get_cellstate(h, v);
-                assert_eq!(cs, CellState::Dead)
+                assert_eq!(cs, &CellState::Dead)
             }
         }
     }
@@ -641,16 +641,16 @@ mod tests {
         u1.update();
         for h in 0..2u8 {
             let cs = u1.grid.get_cellstate(h, 0);
-            assert_eq!(cs, CellState::Dead)
+            assert_eq!(cs, &CellState::Dead)
         }
 
         // test with center cell alive
         let mut u2 = Universe::new(3, 1, rule30);
         u2.grid.set_cellstate(1, 0, CellState::Alive);
         // check for correct initial state
-        assert_eq!(u2.grid.get_cellstate(0, 0), CellState::Dead);
-        assert_eq!(u2.grid.get_cellstate(1, 0), CellState::Alive);
-        assert_eq!(u2.grid.get_cellstate(2, 0), CellState::Dead);
+        assert_eq!(u2.grid.get_cellstate(0, 0), &CellState::Dead);
+        assert_eq!(u2.grid.get_cellstate(1, 0), &CellState::Alive);
+        assert_eq!(u2.grid.get_cellstate(2, 0), &CellState::Dead);
 
         // more in depth sanity checks
         assert_eq!((1, 0), u2.grid.get_east_coordinate(0, 0));
@@ -669,19 +669,19 @@ mod tests {
         u2.update();
 
         // test shadow state
-        assert_eq!(u2.shadow.get_cellstate(0, 0), CellState::Alive);
-        assert_eq!(u2.shadow.get_cellstate(1, 0), CellState::Alive);
-        assert_eq!(u2.shadow.get_cellstate(2, 0), CellState::Alive);
+        assert_eq!(u2.shadow.get_cellstate(0, 0), &CellState::Alive);
+        assert_eq!(u2.shadow.get_cellstate(1, 0), &CellState::Alive);
+        assert_eq!(u2.shadow.get_cellstate(2, 0), &CellState::Alive);
 
         // test public start
-        assert_eq!(u2.grid.get_cellstate(0, 0), CellState::Alive);
-        assert_eq!(u2.grid.get_cellstate(1, 0), CellState::Alive);
-        assert_eq!(u2.grid.get_cellstate(2, 0), CellState::Alive);
+        assert_eq!(u2.grid.get_cellstate(0, 0), &CellState::Alive);
+        assert_eq!(u2.grid.get_cellstate(1, 0), &CellState::Alive);
+        assert_eq!(u2.grid.get_cellstate(2, 0), &CellState::Alive);
 
         // this universe should die on second iteration
         u2.update();
-        assert_eq!(u2.grid.get_cellstate(0, 0), CellState::Dead);
-        assert_eq!(u2.grid.get_cellstate(1, 0), CellState::Dead);
-        assert_eq!(u2.grid.get_cellstate(2, 0), CellState::Dead);
+        assert_eq!(u2.grid.get_cellstate(0, 0), &CellState::Dead);
+        assert_eq!(u2.grid.get_cellstate(1, 0), &CellState::Dead);
+        assert_eq!(u2.grid.get_cellstate(2, 0), &CellState::Dead);
     }
 }
