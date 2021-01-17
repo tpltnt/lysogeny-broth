@@ -304,7 +304,7 @@ impl Grid {
 }
 
 /// A universe contains everything you need to enable
-/// Celluluar Automata to do their thing.
+/// Cellular Automata to do their thing.
 #[derive(Copy, Clone)]
 pub struct Universe {
     pub grid: Grid,                            // current grid state
