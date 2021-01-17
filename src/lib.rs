@@ -678,7 +678,7 @@ mod tests {
         assert_eq!((0, 0), u2.grid.get_west_coordinate(1, 0));
         assert_eq!((1, 0), u2.grid.get_west_coordinate(2, 0));
 
-        // test the rule
+        // test the rule itself
         assert_eq!(CellState::Alive, rule30(0, 0, &u2.grid));
         assert_eq!(CellState::Alive, rule30(1, 0, &u2.grid));
         assert_eq!(CellState::Alive, rule30(2, 0, &u2.grid));
@@ -686,12 +686,13 @@ mod tests {
         // all cells become alive in first iteration (apply the rule)
         u2.update();
 
-        // test shadow state
+        /*/ test shadow state
         assert_eq!(u2.shadow.get_cellstate(0, 0), &CellState::Alive);
         assert_eq!(u2.shadow.get_cellstate(1, 0), &CellState::Alive);
         assert_eq!(u2.shadow.get_cellstate(2, 0), &CellState::Alive);
+        */
 
-        // test public start
+        // test public state
         assert_eq!(u2.grid.get_cellstate(0, 0), &CellState::Alive);
         assert_eq!(u2.grid.get_cellstate(1, 0), &CellState::Alive);
         assert_eq!(u2.grid.get_cellstate(2, 0), &CellState::Alive);
