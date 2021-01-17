@@ -68,6 +68,16 @@ impl Grid {
         }
     }
 
+    /// Get the number of columns (i.e. horizontal size)
+    pub fn get_horizontal_size(&self) -> u8 {
+        self.horizontal_size
+    }
+
+    /// Get number of rows (i.e. vertical size)
+    pub fn get_vertical_size(&self) -> u8 {
+        self.vertical_size
+    }
+
     /// Retrieve a cell state (for modification).
     ///
     /// # Arguments
