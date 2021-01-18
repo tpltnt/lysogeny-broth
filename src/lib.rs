@@ -622,21 +622,24 @@ mod tests {
     }
 
     #[test]
-    fn universe_update_inversion() {
+    fn universe_update_one_cell_inversion() {
         fn inversion(h: u8, v: u8, g: &Grid) -> CellState {
             match g.get_cellstate(h, v) {
                 &CellState::Alive => CellState::Dead,
                 &CellState::Dead => CellState::Alive,
             }
         }
-        let u = Universe::new(4, 6, inversion);
+
+        let mut u = Universe::new(1, 1, inversion);
+        assert_eq!(u.grid.get_cellstate(0, 0), &CellState::Dead);
+
+        // do it manually
+        u.grid.set_cellstate(0, 0, CellState::Alive);
+        assert_eq!(u.grid.get_cellstate(0, 0), &CellState::Alive);
+
+        // reset via rule
         u.update();
-        for h in 0..4u8 {
-            for v in 0..6u8 {
-                let cs = u.grid.get_cellstate(h, v);
-                assert_eq!(cs, &CellState::Alive)
-            }
-        }
+        assert_eq!(u.grid.get_cellstate(0, 0), &CellState::Dead);
     }
 
     // test based on Wolfram rule 30
