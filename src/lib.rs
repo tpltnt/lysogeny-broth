@@ -339,14 +339,16 @@ impl Universe {
 
     /// Update the universe according to the given state and rules
     pub fn update(mut self) {
-        // update the shadow grid
+        // calculate new state from original grid and
+        // (temporarily) save in shadow grid
         for h in 0..self.grid.horizontal_size {
             for v in 0..self.grid.vertical_size {
                 let state = (self.automaton)(h, v, &self.grid);
                 self.shadow.set_cellstate(h, v, state);
             }
         }
-        // copy over new state to public grid
+
+        // copy over new (shadow) state to public grid
         //self.grid = self.shadow;
         for h in 0..self.grid.horizontal_size {
             for v in 0..self.grid.vertical_size {
