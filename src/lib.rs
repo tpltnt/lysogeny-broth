@@ -347,13 +347,20 @@ impl Universe {
             }
         }
         // copy over new state to public grid
-        self.grid = self.shadow;
+        //self.grid = self.shadow;
+        for h in 0..self.grid.horizontal_size {
+            for v in 0..self.grid.vertical_size {
+                let state = self.shadow.get_cellstate(h, v);
+                self.grid.set_cellstate(h, v, *state); // does not work
+            }
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::CellState::Alive;
 
     #[test]
     // check grid creation values
@@ -607,18 +614,50 @@ mod tests {
     }
 
     #[test]
-    fn universe_update() {
+    fn universe_update_on_grid() {
         fn identity(h: u8, v: u8, g: &Grid) -> CellState {
             *g.get_cellstate(h, v)
         }
-        let u = Universe::new(4, 6, identity);
-        u.update();
+        let u1 = Universe::new(4, 6, identity);
+        u1.update();
         for h in 0..4u8 {
             for v in 0..6u8 {
-                let cs = u.grid.get_cellstate(h, v);
+                let cs = u1.grid.get_cellstate(h, v);
                 assert_eq!(cs, &CellState::Dead)
             }
         }
+
+        fn inversion(h: u8, v: u8, g: &Grid) -> CellState {
+            match g.get_cellstate(h, v) {
+                &CellState::Alive => CellState::Dead,
+                &CellState::Dead => CellState::Alive,
+            }
+        }
+
+        let u2 = Universe::new(4, 6, inversion);
+        u2.update();
+        for h in 0..4u8 {
+            for v in 0..6u8 {
+                let cs = u2.grid.get_cellstate(h, v);
+                assert_eq!(cs, &CellState::Alive);
+            }
+        }
+    }
+
+    #[test]
+    fn universe_automaton() {
+        fn inversion(h: u8, v: u8, g: &Grid) -> CellState {
+            match g.get_cellstate(h, v) {
+                &CellState::Alive => CellState::Dead,
+                &CellState::Dead => CellState::Alive,
+            }
+        }
+
+        let u = Universe::new(1, 1, inversion);
+        assert_eq!(u.grid.get_cellstate(0, 0), &CellState::Dead);
+
+        let state = (u.automaton)(0, 0, &u.grid);
+        assert_eq!(state, CellState::Alive);
     }
 
     #[test]
@@ -637,9 +676,11 @@ mod tests {
         u.grid.set_cellstate(0, 0, CellState::Alive);
         assert_eq!(u.grid.get_cellstate(0, 0), &CellState::Alive);
 
-        // reset via rule
-        u.update();
-        assert_eq!(u.grid.get_cellstate(0, 0), &CellState::Dead);
+        // reset via inversion rule
+        u.update(); // TODO: -> calling update seems to fail moditying the states
+                    //assert_eq!(u.shadow.get_cellstate(0, 0), &CellState::Alive); // sanity check on shadow state -> fails
+                    //u.grid.set_cellstate(0,0,CellState::Dead);  // this works
+        assert_eq!(u.grid.get_cellstate(0, 0), &CellState::Dead); // this fails
     }
 
     // test based on Wolfram rule 30
