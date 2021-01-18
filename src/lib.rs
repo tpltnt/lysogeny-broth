@@ -24,6 +24,12 @@ pub enum CellState {
 /// A structure to encode a grid with cells.
 /// Cell positions start at top left corner.
 /// The grid handles everything in terms of space.
+/// The retrieval methods for different neighbours
+/// allow for the implementation of different
+/// neighbourhoods (e.g. von Neumann, Moore ...) or
+/// even arbitrary functions to determine the new
+/// value of a cell based on its adjacent cells
+/// (or even state of the whole grid).
 #[derive(Copy, Clone, Debug)]
 pub struct Grid {
     // size allows for 256x256 cells -> enough for embedded
