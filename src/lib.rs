@@ -338,7 +338,7 @@ impl Universe {
     }
 
     /// Update the universe according to the given state and rules
-    pub fn update(mut self) {
+    pub fn update(&mut self) {
         // calculate new state from original grid and
         // (temporarily) save in shadow grid
         for h in 0..self.grid.horizontal_size {
@@ -362,7 +362,6 @@ impl Universe {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::CellState::Alive;
 
     #[test]
     // check grid creation values
@@ -620,7 +619,7 @@ mod tests {
         fn identity(h: u8, v: u8, g: &Grid) -> CellState {
             *g.get_cellstate(h, v)
         }
-        let u1 = Universe::new(4, 6, identity);
+        let mut u1 = Universe::new(4, 6, identity);
         u1.update();
         for h in 0..4u8 {
             for v in 0..6u8 {
@@ -636,7 +635,7 @@ mod tests {
             }
         }
 
-        let u2 = Universe::new(4, 6, inversion);
+        let mut u2 = Universe::new(4, 6, inversion);
         u2.update();
         for h in 0..4u8 {
             for v in 0..6u8 {
@@ -688,7 +687,7 @@ mod tests {
     // test based on Wolfram rule 30
     // https://mathworld.wolfram.com/Rule30.html
     // https://en.wikipedia.org/wiki/Rule_30
-    //#[test]
+    #[test]
     fn universe_update_rule30() {
         fn rule30(h: u8, v: u8, g: &Grid) -> CellState {
             let left = g.get_west_coordinate(h, v);
@@ -711,7 +710,7 @@ mod tests {
         }
 
         // test on dead universe -> should stay dead
-        let u1 = Universe::new(3, 1, rule30);
+        let mut u1 = Universe::new(3, 1, rule30);
         u1.update();
         for h in 0..2u8 {
             let cs = u1.grid.get_cellstate(h, 0);
@@ -742,11 +741,10 @@ mod tests {
         // all cells become alive in first iteration (apply the rule)
         u2.update();
 
-        /*/ test shadow state
+        // test shadow state
         assert_eq!(u2.shadow.get_cellstate(0, 0), &CellState::Alive);
         assert_eq!(u2.shadow.get_cellstate(1, 0), &CellState::Alive);
         assert_eq!(u2.shadow.get_cellstate(2, 0), &CellState::Alive);
-        */
 
         // test public state
         assert_eq!(u2.grid.get_cellstate(0, 0), &CellState::Alive);
