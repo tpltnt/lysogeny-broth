@@ -645,7 +645,7 @@ mod tests {
     // test based on Wolfram rule 30
     // https://mathworld.wolfram.com/Rule30.html
     // https://en.wikipedia.org/wiki/Rule_30
-    #[test]
+    //#[test]
     fn universe_update_rule30() {
         fn rule30(h: u8, v: u8, g: &Grid) -> CellState {
             let left = g.get_west_coordinate(h, v);
