@@ -10,6 +10,18 @@ under the MIT/Apache 2.0 licenses.
 * retrieve value as grid: `cargo run --example retrieval`
 * implementation of rule 30: `cargo run --example rule30`
 
+# versions / changes
+
+## 1.1
+* binary cell states are explicit feature now
+
+## 1.0
+* grid works (setting & retrieving cell states)
+* universe implemented (rules via function pointer)
+* tests
+* examples
+* documentation
+
 # links
 * [wikipedia: cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton)
 * [Wolfram Atlas - various types of one-dimensional cellular automata](http://atlas.wolfram.com/TOC/TOC_200.html)
