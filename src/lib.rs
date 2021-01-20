@@ -53,9 +53,36 @@ const HORIZONTAL_MAX: usize = u8::MAX as usize;
 /// A cell has no concept of its neighbours. Everything
 /// in terms of space is handled by the Grid.
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[cfg(not(feature = "dead-alive-only"))]
+pub enum CellState {
+    Dummy,
+}
+
+/// The state of a cell. In this case it is either
+/// dead or alive.
+///
+/// # Remarks
+/// A cell has no concept of its neighbours. Everything
+/// in terms of space is handled by the Grid.
+#[cfg(feature = "dead-alive-only")]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum CellState {
     Dead,
     Alive,
+}
+
+impl CellState {
+    #[cfg(feature = "dead-alive-only")]
+    /// If cells can be either alive or dead, then
+    /// their state could be converted into a boolean
+    /// value where true means 'alive' (i.e. the cell
+    /// is there) and false means 'dead') (i.e. no cell).
+    pub fn into_bool(self) -> bool {
+        if self == CellState::Dead {
+            return false;
+        }
+        true
+    }
 }
 
 /// A structure to encode a grid with cells.
@@ -107,6 +134,9 @@ impl Grid {
         Grid {
             horizontal_size: h_size,
             vertical_size: v_size,
+            #[cfg(not(feature = "dead-alive-only"))]
+            cells: [[CellState::Dummy; HORIZONTAL_MAX]; VERTICAL_MAX],
+            #[cfg(feature = "dead-alive-only")]
             cells: [[CellState::Dead; HORIZONTAL_MAX]; VERTICAL_MAX],
         }
     }
@@ -426,10 +456,16 @@ mod tests {
     fn grid_get_cellstate() {
         let g = Grid::new(3, 17);
         let mut c = g.get_cellstate(1, 8);
+        #[cfg(not(feature = "dead-alive-only"))]
+        assert_eq!(c, &CellState::Dummy);
+        #[cfg(feature = "dead-alive-only")]
         assert_eq!(c, &CellState::Dead);
 
         // test using tuple
         c = g.get_cellstate_hv((1, 2));
+        #[cfg(not(feature = "dead-alive-only"))]
+        assert_eq!(c, &CellState::Dummy);
+        #[cfg(feature = "dead-alive-only")]
         assert_eq!(c, &CellState::Dead);
     }
 
@@ -451,13 +487,17 @@ mod tests {
     // check grid creation values
     fn grid_set_cellstate() {
         let mut g = Grid::new(3, 17);
+        #[cfg(feature = "dead-alive-only")]
         g.set_cellstate(1, 8, CellState::Alive);
         let mut c = g.get_cellstate(1, 8);
+        #[cfg(feature = "dead-alive-only")]
         assert_eq!(c, &CellState::Alive);
 
         // use tuple
+        #[cfg(feature = "dead-alive-only")]
         g.set_cellstate_hv((2, 5), CellState::Alive);
         c = g.get_cellstate(2, 5);
+        #[cfg(feature = "dead-alive-only")]
         assert_eq!(c, &CellState::Alive);
     }
 
@@ -465,6 +505,9 @@ mod tests {
     #[should_panic]
     fn grid_set_cell_v_too_large() {
         let mut g = Grid::new(3, 17);
+        #[cfg(not(feature = "dead-alive-only"))]
+        g.set_cellstate(1, 17, CellState::Dummy);
+        #[cfg(feature = "dead-alive-only")]
         g.set_cellstate(1, 17, CellState::Alive);
     }
 
@@ -472,6 +515,9 @@ mod tests {
     #[should_panic]
     fn grid_set_cell_h_too_large() {
         let mut g = Grid::new(3, 1);
+        #[cfg(not(feature = "dead-alive-only"))]
+        g.set_cellstate(3, 0, CellState::Dummy);
+        #[cfg(feature = "dead-alive-only")]
         g.set_cellstate(3, 0, CellState::Alive);
     }
 
@@ -667,7 +713,10 @@ mod tests {
         for h in 0..4u8 {
             for v in 0..6u8 {
                 let cs = u1.grid.get_cellstate(h, v);
-                assert_eq!(cs, &CellState::Dead)
+                #[cfg(not(feature = "dead-alive-only"))]
+                assert_eq!(cs, &CellState::Dummy);
+                #[cfg(feature = "dead-alive-only")]
+                assert_eq!(cs, &CellState::Dead);
             }
         }
 
@@ -689,6 +738,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "dead-alive-only")]
     fn universe_automaton() {
         fn inversion(h: u8, v: u8, g: &Grid) -> CellState {
             match g.get_cellstate(h, v) {
@@ -705,6 +755,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "dead-alive-only")]
     fn universe_update_one_cell_inversion() {
         fn inversion(h: u8, v: u8, g: &Grid) -> CellState {
             match g.get_cellstate(h, v) {
@@ -731,6 +782,7 @@ mod tests {
     // https://mathworld.wolfram.com/Rule30.html
     // https://en.wikipedia.org/wiki/Rule_30
     #[test]
+    #[cfg(feature = "dead-alive-only")]
     fn universe_update_rule30() {
         fn rule30(h: u8, v: u8, g: &Grid) -> CellState {
             let left = g.get_west_coordinate(h, v);
@@ -799,5 +851,14 @@ mod tests {
         assert_eq!(u2.grid.get_cellstate(0, 0), &CellState::Dead);
         assert_eq!(u2.grid.get_cellstate(1, 0), &CellState::Dead);
         assert_eq!(u2.grid.get_cellstate(2, 0), &CellState::Dead);
+    }
+
+    #[test]
+    #[cfg(feature = "dead-alive-only")]
+    fn cellstate_into_bool() {
+        let mut cs = CellState::Dead;
+        assert_eq!(cs.into_bool(), false);
+        cs = CellState::Alive;
+        assert_eq!(cs.into_bool(), true);
     }
 }

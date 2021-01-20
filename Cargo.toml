@@ -10,4 +10,11 @@ keywords = ["cellular-automata", "nostd"]
 readme = "README.md"
 categories = ["embedded", "no-std", "simulation"]
 
+[features]
+# most people want binary cell states
+default = ["dead-alive-only"]
+
+# enable utility functions for binary cell state
+dead-alive-only = []
+
 [dependencies]
