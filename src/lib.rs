@@ -72,7 +72,7 @@ pub enum CellState {
 }
 
 impl CellState {
-    #[cfg(feature = "dead-alive-only")]
+    #[cfg(feature = "dead-alive-into-bool")]
     /// If cells can be either alive or dead, then
     /// their state could be converted into a boolean
     /// value where true means 'alive' (i.e. the cell
@@ -854,7 +854,7 @@ mod tests {
     }
 
     #[test]
-    #[cfg(feature = "dead-alive-only")]
+    #[cfg(feature = "dead-alive-into-bool")]
     fn cellstate_into_bool() {
         let mut cs = CellState::Dead;
         assert_eq!(cs.into_bool(), false);
