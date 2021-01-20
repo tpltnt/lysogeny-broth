@@ -1,5 +1,5 @@
 // a basic demo for retrieving cell states
-use roux::*;
+use lysogeny_broth::*;
 
 fn main() {
     println!("basic retrieval example");

@@ -1,6 +1,6 @@
 // a basic demo of rule 30
 // https://mathworld.wolfram.com/Rule30.html
-use roux::*;
+use lysogeny_broth::*;
 
 // just print the grid on the terminal
 fn print_grid(g: &Grid) {
