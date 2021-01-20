@@ -15,6 +15,7 @@ under the MIT/Apache 2.0 licenses.
 ## 1.1
 * binary cell states are explicit feature now: "dead-alive-only"
 * optional converion of binary cell states into boolean value as feature: "dead-alive-into-bool"
+* convert eight cellstates into an u8 (octet) via feature: "dead-alive-into-group-u8"
 
 ## 1.0
 * grid works (setting & retrieving cell states)

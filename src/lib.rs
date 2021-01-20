@@ -85,6 +85,22 @@ impl CellState {
     }
 }
 
+#[cfg(feature = "dead-alive-into-group-u8")]
+/// Convert eight binary cell states into a u8 / octet.
+/// A dead cell becomes a 0, an alive one a 1.
+pub fn cs8_into_u8(cs: [CellState; 8]) -> u8 {
+    let mut rdata: u8 = 0b00000000;
+    for s in cs.iter() {
+        rdata = rdata.rotate_left(1);
+        if s == &CellState::Alive {
+            // set bit
+            let bit: u8 = 0b00000001;
+            rdata = rdata | bit;
+        }
+    }
+    return rdata;
+}
+
 /// A structure to encode a grid with cells.
 /// Cell positions start at top left corner.
 /// The grid handles everything in terms of space.
@@ -860,5 +876,27 @@ mod tests {
         assert_eq!(cs.into_bool(), false);
         cs = CellState::Alive;
         assert_eq!(cs.into_bool(), true);
+    }
+
+    #[test]
+    #[cfg(feature = "dead-alive-into-group-u8")]
+    fn util_cs8_into_u8() {
+        let mut group = [CellState::Dead; 8];
+        let mut result = cs8_into_u8(group);
+        assert_eq!(result, 0b00000000);
+
+        group[7] = CellState::Alive;
+        result = cs8_into_u8(group);
+        assert_eq!(result, 0b00000001);
+
+        group[0] = CellState::Alive;
+        result = cs8_into_u8(group);
+        assert_eq!(result, 0b10000001);
+
+        group[0] = CellState::Alive;
+        group[3] = CellState::Alive;
+        group[7] = CellState::Dead;
+        result = cs8_into_u8(group);
+        assert_eq!(result, 0b10010000);
     }
 }
