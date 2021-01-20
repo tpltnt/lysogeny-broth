@@ -4,7 +4,7 @@ The underlying grid is of toroidal shape, i.e. the coordinate values/
 neighbours wrap around.
 
 # examples
-* `cargo run --example retrieval`
-
+* retrieve value as grid: `cargo run --example retrieval`
+* implementation of rule 30: `cargo run --example rule30`
 
 # links
