@@ -3,5 +3,11 @@ name = "roux"
 version = "1.0.0"
 authors = ["tpltnt"]
 edition = "2018"
+description = "Substrate for cellular automata in Rust."
+license = "MIT AND Apache-2.0"
+repository = "https://github.com/tpltnt/roux"
+keywords = ["cellular automata", "nostd"]
+readme = "README.md"
+categories = ["embedded", "no-std", "simulation"]
 
 [dependencies]
