@@ -92,7 +92,7 @@ impl CellState {
     }
 }
 
-#[cfg(feature = "dead-alive-into-group-u8")]
+#[cfg(feature = "dead-alive-u8-utils")]
 /// Convert eight binary cell states into a u8 / octet.
 /// A dead cell becomes a 0, an alive one a 1.
 pub fn cs8_into_u8(cs: [&CellState; 8]) -> u8 {
@@ -108,7 +108,7 @@ pub fn cs8_into_u8(cs: [&CellState; 8]) -> u8 {
     return rdata;
 }
 
-#[cfg(feature = "dead-alive-into-group-u8")]
+#[cfg(feature = "dead-alive-u8-utils")]
 /// Convert eight binary cell states into a u8 / octet.
 /// A dead cell becomes a 0, an alive one a 1.
 pub fn u8_into_cs8(bits: u8) -> [&'static CellState; 8] {
@@ -921,7 +921,7 @@ mod tests {
     }
 
     #[test]
-    #[cfg(feature = "dead-alive-into-group-u8")]
+    #[cfg(feature = "dead-alive-u8-utils")]
     fn util_cs8_into_u8() {
         let mut group = [&CellState::Dead; 8];
         let mut result = cs8_into_u8(group);
@@ -943,7 +943,7 @@ mod tests {
     }
 
     #[test]
-    #[cfg(feature = "dead-alive-into-group-u8")]
+    #[cfg(feature = "dead-alive-u8-utils")]
     fn util_u8_into_cs8() {
         // test defaults
         let mut expectation = [&CellState::Dead; 8];

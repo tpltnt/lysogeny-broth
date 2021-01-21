@@ -20,6 +20,6 @@ dead-alive-only = []
 # allow dead/alive cell to be converted into boolean
 dead-alive-into-bool = ["dead-alive-only"]
 # convert 8 cell states into an octet
-dead-alive-into-group-u8 = ["dead-alive-only"]
+dead-alive-u8-utils = ["dead-alive-only"]
 
 [dependencies]
