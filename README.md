@@ -10,6 +10,7 @@ under the MIT/Apache 2.0 licenses.
 * retrieve value as grid: `cargo run --example retrieval`
 * implementation of rule 30: `cargo run --example rule30`
 
+
 # versions / changes
 
 ## 1.1
@@ -23,6 +24,7 @@ under the MIT/Apache 2.0 licenses.
 * tests
 * examples
 * documentation
+
 
 # links
 * [wikipedia: cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton)
