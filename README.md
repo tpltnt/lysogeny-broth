@@ -17,6 +17,7 @@ under the MIT/Apache 2.0 licenses.
 * documentation extended
 * minor code cleaning
 * `rule30` example minimised
+* fixed signature of `cs8_into_u8()` to be internally compatible
 
 ## 1.1
 * binary cell states are explicit feature now: "dead-alive-only"
