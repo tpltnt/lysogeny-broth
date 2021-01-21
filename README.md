@@ -16,6 +16,7 @@ under the MIT/Apache 2.0 licenses.
 ## upcoming
 * documentation extended
 * minor code cleaning
+* `rule30` example minimised
 
 ## 1.1
 * binary cell states are explicit feature now: "dead-alive-only"
