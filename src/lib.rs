@@ -45,8 +45,11 @@ limitations under the License.
 #![warn(missing_docs)]
 #![warn(clippy::missing_docs_in_private_items)]
 
-// tweak here for grid size / memory usage
+/// Tweak here for vertical grid size / memory usage.
+/// `u8` was chosen to accommodate memory constraints.
 const VERTICAL_MAX: usize = u8::MAX as usize;
+/// Tweak here for horizontal grid size / memory usage.
+/// `u8` was chosen to accommodate memory constraints.
 const HORIZONTAL_MAX: usize = u8::MAX as usize;
 
 /// The state of a cell.
@@ -66,10 +69,12 @@ pub enum CellState {
 /// # Remarks
 /// A cell has no concept of its neighbours. Everything
 /// in terms of space is handled by the Grid.
-#[cfg(feature = "dead-alive-only")]
 #[derive(Copy, Clone, Debug, PartialEq)]
+#[cfg(feature = "dead-alive-only")]
 pub enum CellState {
+    /// represent a dead cell
     Dead,
+    /// represent a living cell
     Alive,
 }
 
@@ -114,10 +119,15 @@ pub fn cs8_into_u8(cs: [CellState; 8]) -> u8 {
 /// (or even state of the whole grid).
 #[derive(Copy, Clone, Debug)]
 pub struct Grid {
-    // size allows for 256x256 cells -> enough for embedded
-    // -> for more adjust the data types
+    /// Allow size allows for 256 horizontal cells.
+    /// This is good enough for embedded environments.
+    /// If you need for more adjust the data types as needed.
     horizontal_size: u8,
+    /// Allow size allows for 256 vertical cells.
+    /// This is good enough for embedded environments.
+    /// If you need for more adjust the data types as needed.
     vertical_size: u8,
+    /// The actual arrays to hold cell states.
     cells: [[CellState; HORIZONTAL_MAX]; VERTICAL_MAX],
 }
 
@@ -408,9 +418,12 @@ impl Grid {
 /// Cellular Automata to do their thing.
 #[derive(Copy, Clone)]
 pub struct Universe {
-    pub grid: Grid,                            // current grid state
-    shadow: Grid,                              // temporary grid to calculate new state
-    automaton: fn(u8, u8, &Grid) -> CellState, // transformation function / automaton
+    /// The current state of the grid.
+    pub grid: Grid,
+    /// Temporary internal grid to calculate new state.
+    shadow: Grid,
+    /// The transformation function / cellular automaton.
+    automaton: fn(u8, u8, &Grid) -> CellState,
 }
 
 impl Universe {
