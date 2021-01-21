@@ -13,6 +13,10 @@ under the MIT/Apache 2.0 licenses.
 
 # versions / changes
 
+## upcoming
+* documentation extended
+* minor code cleaning
+
 ## 1.1
 * binary cell states are explicit feature now: "dead-alive-only"
 * optional converion of binary cell states into boolean value as feature: "dead-alive-into-bool"
