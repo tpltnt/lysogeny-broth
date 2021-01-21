@@ -191,7 +191,7 @@ impl Grid {
         if v >= self.vertical_size {
             panic!("vertical coordinate too large")
         }
-        return &self.cells[h as usize][v as usize];
+        &self.cells[h as usize][v as usize]
     }
 
     /// Retrieve a cell state (for modification) using a coordinate tuple.
