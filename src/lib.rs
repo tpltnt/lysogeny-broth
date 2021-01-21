@@ -42,6 +42,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 #![no_std]
+#![warn(missing_docs)]
+#![warn(clippy::missing_docs_in_private_items)]
 
 // tweak here for grid size / memory usage
 const VERTICAL_MAX: usize = u8::MAX as usize;
