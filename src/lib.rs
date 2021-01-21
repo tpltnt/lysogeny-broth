@@ -72,9 +72,9 @@ pub enum CellState {
 #[derive(Copy, Clone, Debug, PartialEq)]
 #[cfg(feature = "dead-alive-only")]
 pub enum CellState {
-    /// represent a dead cell
+    /// represents a dead cell
     Dead,
-    /// represent a living cell
+    /// represents a living cell
     Alive,
 }
 
@@ -109,7 +109,7 @@ pub fn cs8_into_u8(cs: [CellState; 8]) -> u8 {
 }
 
 /// A structure to encode a grid with cells.
-/// Cell positions start at top left corner.
+/// Cell positions start at the top left corner.
 /// The grid handles everything in terms of space.
 /// The retrieval methods for different neighbours
 /// allow for the implementation of different
