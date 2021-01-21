@@ -1,4 +1,4 @@
-//! `roux` provides data-structures and functions
+//! `lysogeny-broth` provides data-structures and functions
 //! to implement Cellular Automata.
 //! The grid is of toroidal shape, i.e. the coordinate
 //! values/neighbours wrap around. It also uses a statically
