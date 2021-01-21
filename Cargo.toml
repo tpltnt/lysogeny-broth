@@ -6,6 +6,7 @@ edition = "2018"
 description = "Substrate for cellular automata in Rust."
 license = "MIT AND Apache-2.0"
 repository = "https://github.com/tpltnt/lysogeny-broth"
+documentation = "https://docs.rs/lysogeny-broth/"
 keywords = ["cellular-automata", "nostd"]
 readme = "README.md"
 categories = ["embedded", "no-std", "simulation"]
