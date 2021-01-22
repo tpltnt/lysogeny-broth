@@ -20,7 +20,7 @@ under the MIT/Apache 2.0 licenses.
 * fixed signature of `cs8_into_u8()` to be internally compatible
 * added `u8_into_cs8` utility function
 * grouped cellstate / u8 conversions under feature "dead-alive-u8-utils"
-** droped feature "dead-alive-into-group-u8"
+  * droped feature "dead-alive-into-group-u8"
 
 ## 1.1
 * binary cell states are explicit feature now: "dead-alive-only"
