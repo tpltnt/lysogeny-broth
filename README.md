@@ -36,6 +36,7 @@ under the MIT/Apache 2.0 licenses.
 
 
 # links
+* [crate documentation](https://docs.rs/lysogeny-broth/)
 * [wikipedia: cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton)
 * [Wolfram Atlas - various types of one-dimensional cellular automata](http://atlas.wolfram.com/TOC/TOC_200.html)
 * [MathWorld: Rule 30](https://mathworld.wolfram.com/Rule30.html)
