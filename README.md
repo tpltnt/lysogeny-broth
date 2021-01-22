@@ -19,6 +19,8 @@ under the MIT/Apache 2.0 licenses.
 * `rule30` example minimised
 * fixed signature of `cs8_into_u8()` to be internally compatible
 * added `u8_into_cs8` utility function
+* grouped cellstate / u8 conversions under feature "dead-alive-u8-utils"
+** droped feature "dead-alive-into-group-u8"
 
 ## 1.1
 * binary cell states are explicit feature now: "dead-alive-only"
@@ -37,3 +39,4 @@ under the MIT/Apache 2.0 licenses.
 * [wikipedia: cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton)
 * [Wolfram Atlas - various types of one-dimensional cellular automata](http://atlas.wolfram.com/TOC/TOC_200.html)
 * [MathWorld: Rule 30](https://mathworld.wolfram.com/Rule30.html)
+* [ca-rules](https://crates.io/crates/ca-rules) ... a possible compagnion crate
