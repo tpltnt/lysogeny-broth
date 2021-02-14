@@ -5,8 +5,6 @@ use lysogeny_broth::*;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::Write;
-//use serde_json::Result;
-//use std::collections::Vec;
 
 // JSON data structures
 #[derive(Serialize, Deserialize, Debug)]
@@ -52,7 +50,7 @@ fn rule30(h: u8, v: u8, g: &Grid) -> CellState {
 }
 
 fn main() {
-    println!("JSON i/o example");
+    println!("JSON example");
 
     // (JSON) output data
     let mut odata = OutputData {

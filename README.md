@@ -9,7 +9,7 @@ under the MIT/Apache 2.0 licenses.
 # examples
 * retrieve value as grid: `cargo run --example retrieval`
 * implementation of rule 30: `cargo run --example rule30`
-
+* save grid states as JSON: ` cargo run --example json`
 
 # features
 
