@@ -23,7 +23,7 @@ Allow dead/alive cell to be converted into boolean values.
 
 ## dead-alive-u8-utils
 
-Convert 8 cell states into an octet for nicer processing and i/o.
+Group 8 binary cell states into an octet for nicer processing and i/o.
 
 
 
