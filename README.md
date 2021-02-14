@@ -1,6 +1,6 @@
 Substrate for cellular automata in Rust.
 Named after the [LB medium](https://en.wikipedia.org/wiki/Lysogeny_broth)
-used in mircobiology.
+used in mircobiology. Also look into Angelina Fanny Hesse ;)
 The underlying grid is of toroidal shape, i.e. the coordinate
 values/neighbours wrap around. This code is dual-licensed
 under the MIT/Apache 2.0 licenses.
