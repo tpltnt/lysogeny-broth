@@ -36,7 +36,7 @@ Group 8 binary cell states into an octet for nicer processing and i/o.
 * fixed signature of `cs8_into_u8()` to be internally compatible
 * added `u8_into_cs8` utility function
 * grouped cellstate / u8 conversions under feature "dead-alive-u8-utils"
-  * droped feature "dead-alive-into-group-u8"
+  * dropped feature "dead-alive-into-group-u8"
 * added JSON example
 
 ## 1.1
