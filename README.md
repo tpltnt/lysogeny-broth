@@ -11,6 +11,22 @@ under the MIT/Apache 2.0 licenses.
 * implementation of rule 30: `cargo run --example rule30`
 
 
+# features
+
+## dead-alive-only
+
+Enable utility functions for binary (only) cell state.
+
+## dead-alive-into-bool
+
+Allow dead/alive cell to be converted into boolean values.
+
+## dead-alive-u8-utils
+
+Convert 8 cell states into an octet for nicer processing and i/o.
+
+
+
 # versions / changes
 
 ## upcoming
