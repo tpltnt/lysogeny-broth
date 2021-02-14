@@ -18,7 +18,7 @@ fn print_grid(g: &Grid) {
 }
 
 fn main() {
-    println!("Wolfram rule 30  example");
+    println!("Wolfram rule 30 example");
 
     // implementation of rule 30
     fn rule30(h: u8, v: u8, g: &Grid) -> CellState {
