@@ -13,7 +13,7 @@ fn print_grid(g: &Grid) {
                 print!("x");
             }
         }
-        println!("");
+        println!();
     }
 }
 
@@ -29,7 +29,8 @@ fn main() {
             g.get_cellstate(h, v),
             g.get_cellstate_hv(right),
         );
-        return match state {
+
+        match state {
             (CellState::Alive, CellState::Alive, CellState::Alive) => CellState::Dead,
             (CellState::Alive, CellState::Alive, CellState::Dead) => CellState::Dead,
             (CellState::Alive, CellState::Dead, CellState::Alive) => CellState::Dead,
@@ -38,7 +39,7 @@ fn main() {
             (CellState::Dead, CellState::Alive, CellState::Dead) => CellState::Alive,
             (CellState::Dead, CellState::Dead, CellState::Alive) => CellState::Alive,
             (CellState::Dead, CellState::Dead, CellState::Dead) => CellState::Dead,
-        };
+        }
     }
 
     // test with center cell alive

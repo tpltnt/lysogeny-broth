@@ -37,7 +37,8 @@ fn rule30(h: u8, v: u8, g: &Grid) -> CellState {
         g.get_cellstate(h, v),
         g.get_cellstate_hv(right),
     );
-    return match state {
+
+    match state {
         (CellState::Alive, CellState::Alive, CellState::Alive) => CellState::Dead,
         (CellState::Alive, CellState::Alive, CellState::Dead) => CellState::Dead,
         (CellState::Alive, CellState::Dead, CellState::Alive) => CellState::Dead,
@@ -46,7 +47,7 @@ fn rule30(h: u8, v: u8, g: &Grid) -> CellState {
         (CellState::Dead, CellState::Alive, CellState::Dead) => CellState::Alive,
         (CellState::Dead, CellState::Dead, CellState::Alive) => CellState::Alive,
         (CellState::Dead, CellState::Dead, CellState::Dead) => CellState::Dead,
-    };
+    }
 }
 
 fn main() {
