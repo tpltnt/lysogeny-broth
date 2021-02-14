@@ -37,6 +37,7 @@ Group 8 binary cell states into an octet for nicer processing and i/o.
 * added `u8_into_cs8` utility function
 * grouped cellstate / u8 conversions under feature "dead-alive-u8-utils"
   * droped feature "dead-alive-into-group-u8"
+* added JSON example
 
 ## 1.1
 * binary cell states are explicit feature now: "dead-alive-only"
@@ -57,3 +58,4 @@ Group 8 binary cell states into an octet for nicer processing and i/o.
 * [Wolfram Atlas - various types of one-dimensional cellular automata](http://atlas.wolfram.com/TOC/TOC_200.html)
 * [MathWorld: Rule 30](https://mathworld.wolfram.com/Rule30.html)
 * [ca-rules](https://crates.io/crates/ca-rules) ... a possible compagnion crate
+* [JSON](https://www.json.org/json-en.html)
