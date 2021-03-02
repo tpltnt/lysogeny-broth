@@ -1,3 +1,5 @@
+[![dependency status](https://deps.rs/repo/github/tpltnt/lysogeny-broth/status.svg)](https://deps.rs/repo/github/tpltnt/lysogeny-broth)
+
 Substrate for cellular automata in Rust.
 Named after the [LB medium](https://en.wikipedia.org/wiki/Lysogeny_broth)
 used in mircobiology. Also look into Angelina Fanny Hesse ;)
