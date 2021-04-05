@@ -156,6 +156,10 @@ pub struct Grid {
     vertical_size: u8,
     /// The actual arrays to hold cell states.
     cells: [[CellState; HORIZONTAL_MAX]; VERTICAL_MAX],
+    /// The vertical position of the iterator.
+    horizontal_iterator_index: usize,
+    /// The horizontal position of the iterator.
+    vertical_iterator_index: usize,
 }
 
 impl Grid {
@@ -189,6 +193,8 @@ impl Grid {
         Grid {
             horizontal_size: h_size,
             vertical_size: v_size,
+            horizontal_iterator_index: 0,
+            vertical_iterator_index: 0,
             #[cfg(not(feature = "dead-alive-only"))]
             cells: [[CellState::Dummy; HORIZONTAL_MAX]; VERTICAL_MAX],
             #[cfg(feature = "dead-alive-only")]
@@ -438,6 +444,37 @@ impl Grid {
     /// * `hv`: tuple (horizontal coordinate, vertical coordinate)
     pub fn get_northwest_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
         self.get_north_coordinate_hv(self.get_west_coordinate(hv.0, hv.1))
+    }
+}
+
+impl Iterator for Grid {
+    type Item = CellState;
+
+    /// Go over the grid along the rows and return
+    /// the respective state if a cell. This function
+    /// is the basis for the iterator trait.
+    fn next(&mut self) -> Option<CellState> {
+        // check if we are at the end of a row
+        if self.horizontal_iterator_index >= self.horizontal_size as usize {
+            // yes we are, so we go to the next row
+            self.vertical_iterator_index += 1;
+            // and reset the index
+            self.horizontal_iterator_index = 0;
+        }
+        // if we are past the last row
+        if self.vertical_iterator_index >= self.vertical_size as usize {
+            // the iteration stops
+            return None;
+        }
+
+        // get what we want to return
+        let rdata = Some(*self.get_cellstate(
+            self.horizontal_iterator_index as u8,
+            self.vertical_iterator_index as u8,
+        ));
+        // increment tracking indexes
+        self.horizontal_iterator_index += 1;
+        return rdata;
     }
 }
 
@@ -759,6 +796,29 @@ mod tests {
     fn grid_get_northwest_coordinate_h_too_large() {
         let g = Grid::new(1, 4);
         let _ = g.get_northwest_coordinate(1, 2);
+    }
+
+    #[test]
+    fn grid_next() {
+        // D,D,A
+        // D,A,D
+        // -> D,D,A,D,A,D
+        let mut g = Grid::new(3, 2);
+        g.set_cellstate(0, 0, CellState::Dead);
+        g.set_cellstate(1, 0, CellState::Dead);
+        g.set_cellstate(2, 0, CellState::Alive);
+        g.set_cellstate(0, 1, CellState::Dead);
+        g.set_cellstate(1, 1, CellState::Alive);
+        g.set_cellstate(2, 1, CellState::Dead);
+
+        assert_eq!(Some(CellState::Dead), g.next());
+        assert_eq!(Some(CellState::Dead), g.next());
+        assert_eq!(Some(CellState::Alive), g.next());
+        assert_eq!(Some(CellState::Dead), g.next());
+        assert_eq!(Some(CellState::Alive), g.next());
+        assert_eq!(Some(CellState::Dead), g.next());
+        assert_eq!(None, g.next());
+        assert_eq!(None, g.next());
     }
 
     #[test]
