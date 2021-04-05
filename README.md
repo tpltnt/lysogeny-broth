@@ -41,6 +41,7 @@ Group 8 binary cell states into an octet for nicer processing and i/o.
   * dropped feature "dead-alive-into-group-u8"
 * added JSON example
 * implemented `next()` as iterator
+* implemented `next_byte()` for easier byte conversion
 
 ## 1.1
 * binary cell states are explicit feature now: "dead-alive-only"

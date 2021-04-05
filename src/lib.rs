@@ -156,10 +156,14 @@ pub struct Grid {
     vertical_size: u8,
     /// The actual arrays to hold cell states.
     cells: [[CellState; HORIZONTAL_MAX]; VERTICAL_MAX],
-    /// The vertical position of the iterator.
-    horizontal_iterator_index: usize,
-    /// The horizontal position of the iterator.
-    vertical_iterator_index: usize,
+    /// The vertical position of the cell iterator.
+    horizontal_cell_iterator_index: usize,
+    /// The horizontal position of the cell iterator.
+    vertical_cell_iterator_index: usize,
+    /// The vertical position of the cell iterator for byte export.
+    horizontal_byte_iterator_index: usize,
+    /// The horizontal position of the cell iterator for byte export.
+    vertical_byte_iterator_index: usize,
 }
 
 impl Grid {
@@ -193,8 +197,10 @@ impl Grid {
         Grid {
             horizontal_size: h_size,
             vertical_size: v_size,
-            horizontal_iterator_index: 0,
-            vertical_iterator_index: 0,
+            horizontal_cell_iterator_index: 0,
+            vertical_cell_iterator_index: 0,
+            horizontal_byte_iterator_index: 0,
+            vertical_byte_iterator_index: 0,
             #[cfg(not(feature = "dead-alive-only"))]
             cells: [[CellState::Dummy; HORIZONTAL_MAX]; VERTICAL_MAX],
             #[cfg(feature = "dead-alive-only")]
@@ -445,6 +451,41 @@ impl Grid {
     pub fn get_northwest_coordinate_hv(&self, hv: (u8, u8)) -> (u8, u8) {
         self.get_north_coordinate_hv(self.get_west_coordinate(hv.0, hv.1))
     }
+
+    /// Go over the grid row by row and return eight
+    /// cell states as a byte (dead = 0, alive = 1).
+    /// This is an iterator-like utility function.
+    #[cfg(feature = "dead-alive-only")]
+    pub fn next_byte(&mut self) -> Option<u8> {
+        //TODO: check if cell count is a multiple of 8 -> compilation error otherwise
+        let mut rbyte = 0x00u8; // byte to return
+
+        for offset in 0..8 as u8 {
+            if self.horizontal_byte_iterator_index >= self.horizontal_size as usize {
+                // we stepped over the end of a row so ...
+                // ... we go to the next row ...
+                self.vertical_byte_iterator_index += 1;
+                // ... and reset the index pointer
+                self.horizontal_byte_iterator_index = 0;
+            }
+            if self.vertical_byte_iterator_index >= self.vertical_size as usize {
+                return None;
+            }
+
+            match self.get_cellstate(
+                self.horizontal_byte_iterator_index as u8,
+                self.vertical_byte_iterator_index as u8,
+            ) {
+                CellState::Alive => {
+                    // set bit according to offset
+                    rbyte = rbyte | (0x80u8 >> offset);
+                }
+                CellState::Dead => {}
+            }
+            self.horizontal_byte_iterator_index += 1;
+        }
+        Some(rbyte)
+    }
 }
 
 impl Iterator for Grid {
@@ -455,25 +496,25 @@ impl Iterator for Grid {
     /// is the basis for the iterator trait.
     fn next(&mut self) -> Option<CellState> {
         // check if we are at the end of a row
-        if self.horizontal_iterator_index >= self.horizontal_size as usize {
+        if self.horizontal_cell_iterator_index >= self.horizontal_size as usize {
             // yes we are, so we go to the next row
-            self.vertical_iterator_index += 1;
+            self.vertical_cell_iterator_index += 1;
             // and reset the index
-            self.horizontal_iterator_index = 0;
+            self.horizontal_cell_iterator_index = 0;
         }
         // if we are past the last row
-        if self.vertical_iterator_index >= self.vertical_size as usize {
+        if self.vertical_cell_iterator_index >= self.vertical_size as usize {
             // the iteration stops
             return None;
         }
 
         // get what we want to return
         let rdata = Some(*self.get_cellstate(
-            self.horizontal_iterator_index as u8,
-            self.vertical_iterator_index as u8,
+            self.horizontal_cell_iterator_index as u8,
+            self.vertical_cell_iterator_index as u8,
         ));
         // increment tracking indexes
-        self.horizontal_iterator_index += 1;
+        self.horizontal_cell_iterator_index += 1;
 
         rdata
     }
@@ -799,6 +840,33 @@ mod tests {
         let _ = g.get_northwest_coordinate(1, 2);
     }
 
+    #[test]
+    fn grid_next_byte() {
+        // D,A,D,D,D,A,A,A -> 01000111
+        // A,A,D,D,A,D,A,D -> 11001010
+        let mut g = Grid::new(8, 2);
+        g.set_cellstate(0, 0, CellState::Dead);
+        g.set_cellstate(1, 0, CellState::Alive);
+        g.set_cellstate(2, 0, CellState::Dead);
+        g.set_cellstate(3, 0, CellState::Dead);
+        g.set_cellstate(4, 0, CellState::Dead);
+        g.set_cellstate(5, 0, CellState::Alive);
+        g.set_cellstate(6, 0, CellState::Alive);
+        g.set_cellstate(7, 0, CellState::Alive);
+        g.set_cellstate(0, 1, CellState::Alive);
+        g.set_cellstate(1, 1, CellState::Alive);
+        g.set_cellstate(2, 1, CellState::Dead);
+        g.set_cellstate(3, 1, CellState::Dead);
+        g.set_cellstate(4, 1, CellState::Alive);
+        g.set_cellstate(5, 1, CellState::Dead);
+        g.set_cellstate(6, 1, CellState::Alive);
+        g.set_cellstate(7, 1, CellState::Dead);
+
+        assert_eq!(Some(0b01000111), g.next_byte());
+        assert_eq!(Some(0b11001010), g.next_byte());
+        assert_eq!(None, g.next_byte());
+        assert_eq!(None, g.next_byte());
+    }
     #[test]
     fn grid_next() {
         // D,D,A
