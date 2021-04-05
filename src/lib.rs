@@ -474,7 +474,8 @@ impl Iterator for Grid {
         ));
         // increment tracking indexes
         self.horizontal_iterator_index += 1;
-        return rdata;
+
+        rdata
     }
 }
 
