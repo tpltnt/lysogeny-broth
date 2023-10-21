@@ -5,6 +5,7 @@
 //! allocated grid to sidestep the need for dynamic memory
 //! management.
 //! This code is dual-licensed under the MIT and Apache 2.0 licenses.
+// SPDX-License-Identifier: MIT AND Apache-2.0
 /*
 Copyright (c) 2021 tpltnt
 
