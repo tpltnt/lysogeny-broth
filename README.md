@@ -32,6 +32,8 @@ Group 8 binary cell states into an octet for nicer processing and i/o.
 # versions / changes
 
 ## upcoming
+
+## 1.2
 * documentation extended
 * minor code cleaning
 * `rule30` example minimised
